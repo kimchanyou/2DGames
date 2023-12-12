@@ -11,23 +11,37 @@ public class SpikeSpawner : MonoBehaviour
     [SerializeField]
     private float deactivateX;
 
+    private float moveTime = 2f;
+    private Vector2[] spikesPos;
+    private Vector2 startPos;
+    private void Start()
+    {
+        startPos = transform.position;
+        spikesPos = new Vector2[spikes.Length];
+        for(int i = 0; i < spikes.Length; i++)
+        {
+            spikesPos[i] = new Vector2(spikes[i].transform.position.x, spikes[i].transform.position.y);
+        }
+    }
     public void ActivateAll()
     {
-        int count = Random.Range(1, spikes.Length);
+        int count = Random.Range(3, spikes.Length - 2);
 
         int[] numerics = RandomNumerics(spikes.Length, count);
 
         for(int i = 0; i < numerics.Length; i++)
         {
-            spikes[numerics[i]].OnMove(activateX);
+            spikes[numerics[i]].OnMove(activateX, spikes[numerics[i]].transform.position.y - 1.2f);
         }
+        OnMove(-3);
     }
     public void DeactivateAll()
     {
         for (int i = 0; i < spikes.Length; i++)
         {
-            spikes[i].OnMove(deactivateX);
+            spikes[i].OnMove(deactivateX, spikes[i].transform.position.y - 1.2f);
         }
+        StartCoroutine(CoPosReset());
     }
     private int[] RandomNumerics(int maxCount, int n)
     {
@@ -52,5 +66,40 @@ public class SpikeSpawner : MonoBehaviour
         }
 
         return results;
+    }
+
+    public void OnMove(float y)
+    {
+        Vector2 start = transform.position;
+        Vector2 end = new Vector2(transform.position.x, y);
+
+        StartCoroutine(MoveProcess(start, end));
+    }
+
+    private IEnumerator CoPosReset()
+    {
+        yield return new WaitForSeconds(0.55f);
+
+        for (int i = 0; i < spikes.Length; i++)
+        {
+            spikes[i].transform.position = spikesPos[i];
+        }
+    }
+
+    private IEnumerator MoveProcess(Vector2 start, Vector2 end)
+    {
+        float current = 0;
+        float percent = 0;
+
+        while (percent < 1)
+        {
+            current += Time.deltaTime;
+            percent = current / moveTime;
+
+            transform.position = Vector2.Lerp(start, end, percent);
+
+            yield return null;
+        }
+        transform.position = startPos;
     }
 }

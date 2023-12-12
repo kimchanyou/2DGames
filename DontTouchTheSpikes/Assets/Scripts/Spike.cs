@@ -7,10 +7,10 @@ public class Spike : MonoBehaviour
     [SerializeField]
     private float moveTime = 0.5f;
 
-    public void OnMove(float x)
+    public void OnMove(float x, float y)
     {
         Vector2 start = transform.position;
-        Vector2 end = new Vector2(x, transform.position.y);
+        Vector2 end = new Vector2(x, y);
 
         StartCoroutine(MoveProcess(start, end));
     }

@@ -14,26 +14,16 @@ public class GameController : MonoBehaviour
     private RandomColor randomColor;
     private int currentSpawn = 0;
     private int currentScore = 0;
-
+    private int colorChange = 0;
     private void Awake()
     {
         uiController = GetComponent<UIController>();
         randomColor = GetComponent<RandomColor>();
     }
 
-    private IEnumerator Start()
+    private void Start()
     {
-        while (true)
-        {
-            if(Input.GetMouseButtonDown(0))
-            {
-                player.GameStart();
-                uiController.GameStart();
-
-                yield break;
-            }
-            yield return null;
-        }
+        StartCoroutine("GameStart");
     }
 
     public void CollisionWithWall()
@@ -46,7 +36,12 @@ public class GameController : MonoBehaviour
         uiController.UpdateScore(currentScore);
 
         // 배경 색상, 현재 점수 Text UI 색상 변경
-        randomColor.OnChange();
+        if (colorChange % randomColor.randomNum == 0)
+        {
+            randomColor.OnChange();
+            colorChange = 0;
+        }
+        colorChange++;
     }
 
     public void GameOver()
@@ -65,6 +60,20 @@ public class GameController : MonoBehaviour
 
         spikeSpawners[currentSpawn].DeactivateAll();
     }
+    private IEnumerator GameStart()
+    {
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                player.GameStart();
+                uiController.GameStart();
+
+                yield break;
+            }
+            yield return null;
+        }
+    }
     private IEnumerator GameOverProcess()
     {
         if (currentScore > PlayerPrefs.GetInt("HIGHSCORE"))
@@ -78,7 +87,7 @@ public class GameController : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+                UnityEngine.SceneManagement.SceneManager.LoadScene("LobbyScene");
             }
             yield return null;
         }

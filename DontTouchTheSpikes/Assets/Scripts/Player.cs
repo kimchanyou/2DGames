@@ -10,9 +10,9 @@ public class Player : MonoBehaviour
     [SerializeField]
     private PlayerTrailSpawner playerTrailSpawner;
     [SerializeField]
-    private float moveSpeed = 5f;      // 이동 속도
+    private float moveSpeed = 4.5f;      // 이동 속도
     [SerializeField]
-    private float jumpForce = 15f;      // 점프 힘
+    private float jumpForce = 12f;      // 점프 힘
 
     private AudioSource audioSource;    // 벽 충돌 사운드 재생을 위한 AudioSource
     private Rigidbody2D rb2D;           // 속력 제어를 위한 Rigidbody2D
