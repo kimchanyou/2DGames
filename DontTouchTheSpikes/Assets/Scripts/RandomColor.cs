@@ -25,6 +25,6 @@ public class RandomColor : MonoBehaviour
     {
         Color color =Random.ColorHSV(hueMin, hueMax, saturationMin, saturationMax, valueMin, valueMax);
         onChanged?.Invoke(color);
-        randomNum = Random.Range(2, 10);
+        randomNum = Random.Range(2, 8);
     }
 }

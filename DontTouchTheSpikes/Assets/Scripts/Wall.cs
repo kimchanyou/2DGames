@@ -4,19 +4,31 @@ using UnityEngine;
 
 public class Wall : MonoBehaviour
 {
-    [SerializeField]
-    private float activateX;
-    [SerializeField]
-    private float deactivateX;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public float activateX;
+    public float deactivateX;
 
-    // Update is called once per frame
-    void Update()
+    private float moveTime = 0.5f;
+
+    public void OnMove(float x)
     {
-        
+        Vector2 start = transform.position;
+        Vector2 end = new Vector2(x, transform.position.y);
+
+        StartCoroutine(MoveProcess(start, end));
+    }
+    private IEnumerator MoveProcess(Vector2 start, Vector2 end)
+    {
+        float current = 0;
+        float percent = 0;
+
+        while (percent < 1)
+        {
+            current += Time.deltaTime;
+            percent = current / moveTime;
+
+            transform.position = Vector2.Lerp(start, end, percent);
+
+            yield return null;
+        }
     }
 }

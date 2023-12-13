@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float moveSpeed = 4.5f;      // 이동 속도
     [SerializeField]
-    private float jumpForce = 12f;      // 점프 힘
+    private float jumpForce = 7.75f;      // 점프 힘
 
     private AudioSource audioSource;    // 벽 충돌 사운드 재생을 위한 AudioSource
     private Rigidbody2D rb2D;           // 속력 제어를 위한 Rigidbody2D
@@ -85,8 +85,22 @@ public class Player : MonoBehaviour
             gameController.CollisionWithWall();
             // 벽과 충돌했을 때 사운드 재생
             audioSource.Play();
+
+            if (gameController.currentScore % 30 == 0)
+            {
+                if (moveSpeed < 5.5f)
+                {
+                    moveSpeed += 0.2f;
+                    foreach (SpikeSpawner spawner in gameController.spikeSpawners)
+                    {
+                        spawner.moveTime -= 0.1f;
+                    }
+                }
+            }
+            
         }
-        else if (collision.CompareTag("Spike"))
+        //else if (collision.CompareTag("Spike"))
+        else if (collision.CompareTag("Finish"))
         {
             // 플레이어 사망 이펙트 생성
             Instantiate(playerDieEffect, transform.position, Quaternion.identity);

@@ -7,11 +7,13 @@ public class SpikeSpawner : MonoBehaviour
     [SerializeField]
     private Spike[] spikes;
     [SerializeField]
+    private Wall wall;
+    [SerializeField]
     private float activateX;
     [SerializeField]
     private float deactivateX;
 
-    private float moveTime = 2f;
+    public float moveTime = 2.0f;
     private Vector2[] spikesPos;
     private Vector2 startPos;
     private void Start()
@@ -25,10 +27,11 @@ public class SpikeSpawner : MonoBehaviour
     }
     public void ActivateAll()
     {
-        int count = Random.Range(3, spikes.Length - 2);
+        int count = Random.Range(3, spikes.Length - 3);
 
         int[] numerics = RandomNumerics(spikes.Length, count);
 
+        wall.OnMove(wall.activateX);
         for(int i = 0; i < numerics.Length; i++)
         {
             spikes[numerics[i]].OnMove(activateX, spikes[numerics[i]].transform.position.y - 1.2f);
@@ -37,6 +40,7 @@ public class SpikeSpawner : MonoBehaviour
     }
     public void DeactivateAll()
     {
+        wall.OnMove(wall.deactivateX);
         for (int i = 0; i < spikes.Length; i++)
         {
             spikes[i].OnMove(deactivateX, spikes[i].transform.position.y - 1.2f);

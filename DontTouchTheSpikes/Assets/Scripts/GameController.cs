@@ -6,14 +6,13 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    [SerializeField]
-    private SpikeSpawner[] spikeSpawners;
+    public SpikeSpawner[] spikeSpawners;
     [SerializeField]
     private Player player;
     private UIController uiController;
     private RandomColor randomColor;
     private int currentSpawn = 0;
-    private int currentScore = 0;
+    public int currentScore = 0;
     private int colorChange = 0;
     private void Awake()
     {
