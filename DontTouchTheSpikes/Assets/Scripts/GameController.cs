@@ -6,6 +6,10 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    [SerializeField]
+    private LightSpawner[] lightSpawners;
+
+
     public SpikeSpawner[] spikeSpawners;
     [SerializeField]
     private Player player;
@@ -13,7 +17,7 @@ public class GameController : MonoBehaviour
     private RandomColor randomColor;
     private int currentSpawn = 0;
     public int currentScore = 0;
-    private int colorChange = 0;
+    private int colorChange = 1;
     private void Awake()
     {
         uiController = GetComponent<UIController>();
@@ -34,12 +38,14 @@ public class GameController : MonoBehaviour
         currentScore++;
         uiController.UpdateScore(currentScore);
 
+        if (colorChange % 5 == 0)
+            randomColor.OnChangeColor();
         // 배경 색상, 현재 점수 Text UI 색상 변경
-        if (colorChange % randomColor.randomNum == 0)
-        {
-            randomColor.OnChange();
-            colorChange = 0;
-        }
+        //if (colorChange % randomColor.randomNum == 0)
+        //{
+        //    randomColor.OnChange();
+        //    colorChange = 0;
+        //}
         colorChange++;
     }
 
@@ -53,11 +59,27 @@ public class GameController : MonoBehaviour
         // 왼쪽 가시가 활성화되면 오른쪽 가시는 비활성화
         // 오른쪽 가시가 활성화되면 왼쪽 가시는 비활성화
 
-        spikeSpawners[currentSpawn].ActivateAll();
+        //spikeSpawners[currentSpawn].ActivateAll();
 
-        currentSpawn = (currentSpawn + 1) % spikeSpawners.Length;
-
-        spikeSpawners[currentSpawn].DeactivateAll();
+        for (int i = 0; i < lightSpawners.Length; i++)
+        {
+            if (currentSpawn % 2 == 0)
+            {
+                if (i < 3)
+                    lightSpawners[i].ActivateAll();
+                else
+                    lightSpawners[i].DeactivateAll();
+            }
+            else
+            {
+                if (i < 3)
+                    lightSpawners[i].DeactivateAll();
+                else
+                    lightSpawners[i].ActivateAll();
+            }
+        }
+        currentSpawn = (currentSpawn + 1) % 2;
+        //spikeSpawners[currentSpawn].DeactivateAll();
     }
     private IEnumerator GameStart()
     {
@@ -67,6 +89,12 @@ public class GameController : MonoBehaviour
             {
                 player.GameStart();
                 uiController.GameStart();
+                foreach (LightSpawner spawner in lightSpawners)
+                {
+                    spawner.GetComponent<BackGroundLoop>().GameStart();
+                    //spawner.GetComponent<BackGroundLoop>().isGameStart = true;
+
+                }
 
                 yield break;
             }

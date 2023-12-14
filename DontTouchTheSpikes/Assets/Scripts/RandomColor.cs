@@ -15,16 +15,30 @@ public class RandomColor : MonoBehaviour
     [SerializeField]
     private float saturationMax = 1;
     [SerializeField]
-    private float valueMin = 0.7f;
+    private float valueMin = 0.05f;
     [SerializeField]
-    private float valueMax = 1;
+    private float valueMax = 0.3f;
 
     public int randomNum = 1;
 
-    public void OnChange()
+    public float saturation = 0.2f;
+    public float value = 0.8f;
+    //public void OnChange()
+    //{
+    //    Color color =Random.ColorHSV(hueMin, hueMax, saturationMin, saturationMax, valueMin, valueMax);
+    //    onChanged?.Invoke(color);
+    //    //randomNum = Random.Range(2, 8);
+    //}
+
+    public void OnChangeColor()
     {
-        Color color =Random.ColorHSV(hueMin, hueMax, saturationMin, saturationMax, valueMin, valueMax);
+        Color color = Random.ColorHSV(hueMin, hueMax, saturation, saturation, value, value);
         onChanged?.Invoke(color);
-        randomNum = Random.Range(2, 8);
+        if (value <= 0.2f)
+            return;
+        if (saturation <= 0.8f)
+            saturation += 0.01f;
+        else
+            value -= 0.01f;
     }
 }
