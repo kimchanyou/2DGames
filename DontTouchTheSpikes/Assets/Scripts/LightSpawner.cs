@@ -81,7 +81,7 @@ public class LightSpawner : MonoBehaviour
     }
     private IEnumerator CoTurnOff()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.55f);
         for (int i = 0; i < lights.Length; i++)
         {
             lights[i].SetActive(false);

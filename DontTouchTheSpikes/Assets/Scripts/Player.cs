@@ -74,7 +74,7 @@ public class Player : MonoBehaviour
     {
         rb2D.velocity = new Vector2(rb2D.velocity.x, jumpForce);
     }
-
+   
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Wall"))

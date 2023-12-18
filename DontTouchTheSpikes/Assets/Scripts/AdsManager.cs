@@ -43,6 +43,10 @@ public class AdsManager : MonoBehaviour
         });
     }
 
+    private void RequestBanner()
+    {
+
+    }
     #region Banner
 
     public void LoadBannerAd()

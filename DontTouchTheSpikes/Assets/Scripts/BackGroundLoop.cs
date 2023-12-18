@@ -42,7 +42,7 @@ public class BackGroundLoop : MonoBehaviour
     }
     private void Reposition()
     {
-        // 현재 위치에서 오른쪽으로 가로 길이 * 2 만큼 이동
+        // 현재 위치에서 위쪽으로 세로 길이 * 3 만큼 이동
         Vector2 offset = new Vector2(0, height * 3f);
         transform.position = (Vector2)transform.position + offset;
 
