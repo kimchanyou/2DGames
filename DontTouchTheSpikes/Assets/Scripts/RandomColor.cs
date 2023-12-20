@@ -21,7 +21,7 @@ public class RandomColor : MonoBehaviour
 
     public int randomNum = 1;
 
-    public float saturation = 0.2f;
+    public float saturation = 0.5f;
     public float value = 0.8f;
     //public void OnChange()
     //{
@@ -37,8 +37,8 @@ public class RandomColor : MonoBehaviour
         if (value <= 0.2f)
             return;
         if (saturation <= 0.8f)
-            saturation += 0.01f;
+            saturation += 0.02f;
         else
-            value -= 0.01f;
+            value -= 0.02f;
     }
 }

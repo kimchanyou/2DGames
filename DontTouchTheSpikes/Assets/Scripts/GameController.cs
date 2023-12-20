@@ -6,8 +6,7 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    [SerializeField]
-    private LightSpawner[] lightSpawners;
+    public LightSpawner[] lightSpawners;
 
 
     public SpikeSpawner[] spikeSpawners;

@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Wall
   - Spike
+  - Window
+  - Light
   layers:
   - Default
   - TransparentFX

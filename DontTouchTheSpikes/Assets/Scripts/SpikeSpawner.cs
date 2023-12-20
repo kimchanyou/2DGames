@@ -13,6 +13,8 @@ public class SpikeSpawner : MonoBehaviour
     [SerializeField]
     private float deactivateX;
 
+    public int minValue = 2;
+    public int maxValue = 6;
     public float moveTime = 2.0f;
     private Vector2[] spikesPos;
     private Vector2 startPos;
@@ -27,7 +29,7 @@ public class SpikeSpawner : MonoBehaviour
     }
     public void ActivateAll()
     {
-        int count = Random.Range(3, spikes.Length - 3);
+        int count = Random.Range(minValue, spikes.Length - maxValue);
 
         int[] numerics = RandomNumerics(spikes.Length, count);
 

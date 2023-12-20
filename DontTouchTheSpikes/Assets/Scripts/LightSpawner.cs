@@ -12,14 +12,17 @@ public class LightSpawner : MonoBehaviour
     [SerializeField]
     private float deactivateX;
 
+    public int minValue = 2;
+    public int maxValue = 6;
+
     private float moveTime = 0.5f;
     public void ActivateAll()
     {
-        int count = Random.Range(3, lights.Length - 3);
+        int count = Random.Range(3, lights.Length - 4);
 
         int[] numerics = RandomNumerics(lights.Length, count);
 
-        OnMove(activateX, transform.position.y - 1.5f);
+        OnMove(activateX, transform.position.y - 1.15f);
         for (int i = 0; i < numerics.Length; i++)
         {
             lights[numerics[i]].SetActive(true);
@@ -27,7 +30,7 @@ public class LightSpawner : MonoBehaviour
     }
     public void DeactivateAll()
     {
-        OnMove(deactivateX, transform.position.y - 1.5f);
+        OnMove(deactivateX, transform.position.y - 1.15f);
         StartCoroutine(CoTurnOff());
     }
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -10,12 +11,15 @@ public class Player : MonoBehaviour
     [SerializeField]
     private PlayerTrailSpawner playerTrailSpawner;
     [SerializeField]
-    private float moveSpeed = 4.5f;      // 이동 속도
+    private float moveSpeed = 4.8f;      // 이동 속도
     [SerializeField]
-    private float jumpForce = 7.75f;      // 점프 힘
+    private float jumpForce = 7.8f;      // 점프 힘
+    [SerializeField]
+    private Slider slider;
 
     private AudioSource audioSource;    // 벽 충돌 사운드 재생을 위한 AudioSource
     private Rigidbody2D rb2D;           // 속력 제어를 위한 Rigidbody2D
+    private CapsuleCollider2D col2D;
     private SpriteRenderer spriteRenderer;
 
     private void Awake()
@@ -23,8 +27,10 @@ public class Player : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         rb2D = GetComponent<Rigidbody2D>();
         rb2D.isKinematic = true;
+        col2D = GetComponent<CapsuleCollider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.flipX = true;
+        slider.value = 1;
     }
 
     private IEnumerator Start()
@@ -55,6 +61,8 @@ public class Player : MonoBehaviour
     {
         while (true)
         {
+            if (Mathf.Abs(transform.position.y) > 8)
+                GameOver();
             if (Input.GetMouseButtonDown(0))
             {
                 JumpTo();
@@ -69,6 +77,7 @@ public class Player : MonoBehaviour
         float x = -Mathf.Sign(rb2D.velocity.x);
         rb2D.velocity = new Vector2(x * moveSpeed, rb2D.velocity.y);
         spriteRenderer.flipX = !spriteRenderer.flipX;
+        col2D.offset = new Vector2(-col2D.offset.x, col2D.offset.y);
     }
     private void JumpTo()
     {
@@ -86,28 +95,64 @@ public class Player : MonoBehaviour
             // 벽과 충돌했을 때 사운드 재생
             audioSource.Play();
 
-            if (gameController.currentScore % 30 == 0)
+            if (gameController.currentScore % 15 == 0)
             {
-                if (moveSpeed < 5.5f)
+                foreach (LightSpawner spawner in gameController.lightSpawners)
                 {
-                    moveSpeed += 0.2f;
-                    foreach (SpikeSpawner spawner in gameController.spikeSpawners)
-                    {
-                        spawner.moveTime -= 0.1f;
-                    }
+                    if (spawner.maxValue == 2)
+                        return;
+                    if (spawner.minValue < 5)
+                        spawner.minValue++;
+                    else
+                        spawner.maxValue--;
                 }
+            }
+
+            if (gameController.currentScore > 99 && gameController.currentScore % 10 == 0)
+            {
+                if(moveSpeed < 5.5f)
+                {
+                    moveSpeed += 0.1f;
+                }
+            }
+
+        }
+        else if (collision.CompareTag("Light"))
+        {
+            if (slider.value <= 0)
+            {
+                GameOver();
             }
             
         }
-        //else if (collision.CompareTag("Spike"))
-        else if (collision.CompareTag("Finish"))
+    }
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Light"))
         {
-            // 플레이어 사망 이펙트 생성
-            Instantiate(playerDieEffect, transform.position, Quaternion.identity);
-            // 게임오버 처리
-            gameController.GameOver();
-            // 플레이어 비활성화
-            gameObject.SetActive(false);
+            spriteRenderer.color = Color.red;
+            slider.value -= Time.deltaTime * 0.7f;
+            if (slider.value <= 0)
+            {
+                GameOver();
+            }
         }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Light"))
+        {
+            spriteRenderer.color = Color.white;
+        }
+    }
+
+    private void GameOver()
+    {
+        // 플레이어 사망 이펙트 생성
+        Instantiate(playerDieEffect, transform.position, Quaternion.identity);
+        // 게임오버 처리
+        gameController.GameOver();
+        // 플레이어 비활성화
+        gameObject.SetActive(false);
     }
 }

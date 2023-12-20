@@ -7,7 +7,6 @@ public class BackGroundLoop : MonoBehaviour
     private float height;
 
 
-    //public bool isGameStart;
     private void Awake()
     {
         BoxCollider2D boxCollider2D = GetComponent<BoxCollider2D>();
@@ -20,21 +19,12 @@ public class BackGroundLoop : MonoBehaviour
         StartCoroutine(CoBackGroundLoop());
     }
 
-    //private void Update()
-    //{
-    //    if (isGameStart)
-    //    {
-    //        transform.Translate(Vector3.down * 5f * Time.deltaTime);
-    //        if (transform.position.y < -height)
-    //            Reposition();
-    //    }
-    //}
 
     private IEnumerator CoBackGroundLoop()
     {
         while (true)
         {
-            transform.Translate(Vector3.down * 3f * Time.deltaTime);
+            transform.Translate(Vector3.down * 2.3f * Time.deltaTime);
             if (transform.position.y < -(height+5f))
                 Reposition();
             yield return null;

@@ -33,7 +33,7 @@ public class PlayerTrailEffect : MonoBehaviour
     {
         float current = 0;
         float percent = 0;
-        Vector3 start = transform.localScale * 0.8f;
+        Vector3 start = transform.localScale;
         Vector3 end = transform.localScale * 0.2f;
 
         while (percent < 1)
@@ -46,7 +46,7 @@ public class PlayerTrailEffect : MonoBehaviour
             color.a = Mathf.Lerp(1, 0, curve.Evaluate(percent));
             spriteRenderer.color = color;
 
-            // 크기를 start(0.8, 0.8, 0.8)에서 end(0.2, 0.2, 0.2)으로 변경
+            // 크기를 start(0.8, 0.8, 0.8)에서 end(0.16, 0.16, 0.16)으로 변경
             transform.localScale = Vector3.Lerp(start, end, curve.Evaluate(percent));
 
             yield return null;
