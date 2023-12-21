@@ -24,7 +24,7 @@ public class BackGroundLoop : MonoBehaviour
     {
         while (true)
         {
-            transform.Translate(Vector3.down * 2.3f * Time.deltaTime);
+            transform.Translate(Vector3.down * 3f * Time.deltaTime);
             if (transform.position.y < -(height+5f))
                 Reposition();
             yield return null;

@@ -137,7 +137,10 @@ PlayerSettings:
   vulkanEnableCommandBufferRecycling: 1
   loadStoreDebugModeEnabled: 0
   bundleVersion: 1.0.0
-  preloadedAssets: []
+  preloadedAssets:
+  - {fileID: -8705544924613227900, guid: 119e861354509fe48a1355fa4761f57e, type: 2}
+  - {fileID: 11400000, guid: 3a82c907cb25fca4cb81cab60c0b4731, type: 2}
+  - {fileID: 11400000, guid: c8a42c6b49e452c45bb5d48c1c1cd4a6, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -158,7 +161,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.DDangNuAngGames.DontTouchTheSpikes
+    Android: com.DDangNuAngGames.AvoidLightIntoTheDarkness
     Lumin: com.DefaultCompany.com.unity.template.mobile2D
     Standalone: com.DefaultCompany.com.unity.template.mobile2D
     iPhone: com.DefaultCompany.com.unity.template.mobile2D

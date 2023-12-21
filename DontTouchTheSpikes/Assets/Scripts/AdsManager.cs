@@ -6,7 +6,7 @@ using System;
 
 public class AdsManager : MonoBehaviour
 {
-    public TextMeshProUGUI totalCoinText;
+    //public TextMeshProUGUI totalCoinText;
 
     public string appId = "ca-app-pub-3004596348000005~1515888924";
 
@@ -41,11 +41,32 @@ public class AdsManager : MonoBehaviour
             print("Ads Initialized !!");
 
         });
+        LoadBannerAd();
     }
 
     private void RequestBanner()
     {
+        #if UNITY_ANDROID
+            string adBannerId = "ca-app-pub-3940256099942544/6300978111"; //테스트용
 
+        #elif UNITY_IPHONE
+            string adBannerId = "ca-app-pub-3940256099942544/2934735716";
+
+        #else
+            string adBannerId = "unexpected_playform";
+        #endif
+
+        if (bannerView != null)
+        {
+            DestroyBannerAd();
+        }
+        AdSize adaptiveSize = AdSize.GetCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(AdSize.FullWidth);
+
+        bannerView = new BannerView(adBannerId, adaptiveSize, AdPosition.Bottom);
+
+        AdRequest request = new AdRequest.Builder().Build();
+
+        bannerView.LoadAd(request);
     }
     #region Banner
 
@@ -338,7 +359,7 @@ public class AdsManager : MonoBehaviour
     }
     void ShowCoins()
     {
-        totalCoinText.text = "TotalCoin : " + PlayerPrefs.GetInt("totalCoins").ToString();
+        //totalCoinText.text = "TotalCoin : " + PlayerPrefs.GetInt("totalCoins").ToString();
     }
     #endregion
 }

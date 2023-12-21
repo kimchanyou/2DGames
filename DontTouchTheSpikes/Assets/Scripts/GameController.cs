@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using GoogleMobileAds.Api;
 
 public class GameController : MonoBehaviour
 {
@@ -12,6 +13,9 @@ public class GameController : MonoBehaviour
     public SpikeSpawner[] spikeSpawners;
     [SerializeField]
     private Player player;
+    [SerializeField]
+    private Heart heart;
+
     private UIController uiController;
     private RandomColor randomColor;
     private int currentSpawn = 0;
@@ -25,7 +29,7 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine("GameStart");
+        GoogleManager.Instance.RequestBanner();
     }
 
     public void CollisionWithWall()
@@ -46,11 +50,28 @@ public class GameController : MonoBehaviour
         //    colorChange = 0;
         //}
         colorChange++;
+        int rand = Random.Range(0, 100);
+        if (rand < 95)
+            return;
+        if (!heart.gameObject.activeSelf)
+        {
+            heart.gameObject.SetActive(true);
+            if (currentScore % 2 == 0)
+                heart.transform.position = new Vector2(2.5f, Random.Range(-5.5f, 5.5f));
+            else
+                heart.transform.position = new Vector2(-2.5f, Random.Range(-5.5f, 5.5f));
+            heart.originY = heart.transform.position.y;
+        }
     }
 
     public void GameOver()
     {
-        StartCoroutine("GameOverProcess");
+        if (currentScore > PlayerPrefs.GetInt("HIGHSCORE"))
+        {
+            PlayerPrefs.SetInt("HIGHSCORE", currentScore);
+            GoogleManager.Instance.AddLeaderboard(currentScore);
+        }
+        uiController.GameOver();
     }
 
     private void UpdateSpikes()
@@ -80,42 +101,57 @@ public class GameController : MonoBehaviour
         currentSpawn = (currentSpawn + 1) % 2;
         //spikeSpawners[currentSpawn].DeactivateAll();
     }
-    private IEnumerator GameStart()
+    public void GameStart()
     {
-        while (true)
+        player.GameStart();
+        uiController.GameStart();
+        foreach (LightSpawner spawner in lightSpawners)
         {
-            if (Input.GetMouseButtonDown(0))
-            {
-                player.GameStart();
-                uiController.GameStart();
-                foreach (LightSpawner spawner in lightSpawners)
-                {
-                    spawner.GetComponent<BackGroundLoop>().GameStart();
-                    //spawner.GetComponent<BackGroundLoop>().isGameStart = true;
-
-                }
-
-                yield break;
-            }
-            yield return null;
+            spawner.GetComponent<BackGroundLoop>().GameStart();
         }
     }
-    private IEnumerator GameOverProcess()
+
+    public void GameReStart()
     {
-        if (currentScore > PlayerPrefs.GetInt("HIGHSCORE"))
-        {
-            PlayerPrefs.SetInt("HIGHSCORE", currentScore);
-        }
-
-        uiController.GameOver();
-
-        while (true)
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                UnityEngine.SceneManagement.SceneManager.LoadScene("LobbyScene");
-            }
-            yield return null;
-        }
+        GoogleManager.Instance.RequestInterstitial();
+        //UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
     }
+    //private IEnumerator GameStart()
+    //{
+    //    while (true)
+    //    {
+    //        if (Input.GetMouseButtonDown(0))
+    //        {
+    //            player.GameStart();
+    //            uiController.GameStart();
+    //            foreach (LightSpawner spawner in lightSpawners)
+    //            {
+    //                spawner.GetComponent<BackGroundLoop>().GameStart();
+    //                //spawner.GetComponent<BackGroundLoop>().isGameStart = true;
+
+    //            }
+
+    //            yield break;
+    //        }
+    //        yield return null;
+    //    }
+    //}
+    //private IEnumerator GameOverProcess()
+    //{
+    //    if (currentScore > PlayerPrefs.GetInt("HIGHSCORE"))
+    //    {
+    //        PlayerPrefs.SetInt("HIGHSCORE", currentScore);
+    //    }
+
+    //    uiController.GameOver();
+
+    //    while (true)
+    //    {
+    //        if (Input.GetMouseButtonDown(0))
+    //        {
+    //            UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
+    //        }
+    //        yield return null;
+    //    }
+    //}
 }

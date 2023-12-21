@@ -8,6 +8,8 @@ public class UIController : MonoBehaviour
     [Header("Main")]
     [SerializeField]
     private GameObject mainPanel;
+    [SerializeField]
+    private TextMeshProUGUI highScore;
 
     [Header("InGame")]
     [SerializeField]
@@ -21,7 +23,10 @@ public class UIController : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI textHighScore;
 
-
+    private void Start()
+    {
+        highScore.text = $"HIGH SCORE : {PlayerPrefs.GetInt("HIGHSCORE")}";
+    }
     public void GameStart()
     {
         mainPanel.SetActive(false);

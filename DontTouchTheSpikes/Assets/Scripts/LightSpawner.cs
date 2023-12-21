@@ -18,11 +18,11 @@ public class LightSpawner : MonoBehaviour
     private float moveTime = 0.5f;
     public void ActivateAll()
     {
-        int count = Random.Range(3, lights.Length - 4);
+        int count = Random.Range(minValue, lights.Length - maxValue);
 
         int[] numerics = RandomNumerics(lights.Length, count);
 
-        OnMove(activateX, transform.position.y - 1.15f);
+        OnMove(activateX, transform.position.y - 1.5f);
         for (int i = 0; i < numerics.Length; i++)
         {
             lights[numerics[i]].SetActive(true);
@@ -30,7 +30,7 @@ public class LightSpawner : MonoBehaviour
     }
     public void DeactivateAll()
     {
-        OnMove(deactivateX, transform.position.y - 1.15f);
+        OnMove(deactivateX, transform.position.y - 1.5f);
         StartCoroutine(CoTurnOff());
     }
 

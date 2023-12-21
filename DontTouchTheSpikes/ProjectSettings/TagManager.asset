@@ -8,6 +8,7 @@ TagManager:
   - Spike
   - Window
   - Light
+  - Heart
   layers:
   - Default
   - TransparentFX

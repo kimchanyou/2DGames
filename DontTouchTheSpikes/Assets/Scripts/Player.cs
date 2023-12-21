@@ -16,6 +16,8 @@ public class Player : MonoBehaviour
     private float jumpForce = 7.8f;      // 점프 힘
     [SerializeField]
     private Slider slider;
+    [SerializeField]
+    private AudioClip[] sounds;
 
     private AudioSource audioSource;    // 벽 충돌 사운드 재생을 위한 AudioSource
     private Rigidbody2D rb2D;           // 속력 제어를 위한 Rigidbody2D
@@ -66,7 +68,7 @@ public class Player : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 JumpTo();
-
+                audioSource.PlayOneShot(sounds[1]);
                 playerTrailSpawner.OnSpawns();
             }
             yield return null;
@@ -93,7 +95,7 @@ public class Player : MonoBehaviour
             // 벽과 충돌했을 때 로직 (점수 증가, 색상 변경, 가시 횔성/비활성)
             gameController.CollisionWithWall();
             // 벽과 충돌했을 때 사운드 재생
-            audioSource.Play();
+            audioSource.PlayOneShot(sounds[3]);
 
             if (gameController.currentScore % 15 == 0)
             {
@@ -110,15 +112,24 @@ public class Player : MonoBehaviour
 
             if (gameController.currentScore > 99 && gameController.currentScore % 10 == 0)
             {
-                if(moveSpeed < 5.5f)
+                if(moveSpeed < 5.7f)
                 {
                     moveSpeed += 0.1f;
                 }
             }
 
         }
+        else if(collision.CompareTag("Heart"))
+        {
+            audioSource.PlayOneShot(sounds[0]);
+            if (slider.value <= 0.8f)
+                slider.value += 0.2f;
+            else
+                slider.value = 1;
+        }
         else if (collision.CompareTag("Light"))
         {
+            audioSource.PlayOneShot(sounds[2]);
             if (slider.value <= 0)
             {
                 GameOver();
